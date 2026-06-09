@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const {Schema,model}=require('mongoose');
+const {createtokenforuser}=require('../services/authentication');
 
 const userSchema=new Schema({
     name:{
@@ -41,14 +42,15 @@ userSchema.pre('save',function(next){
     user.password=hashpassword;
     user.salt=salt;
 });
-// Static method to match password
+// Static method to match password and create token
 userSchema.static('matchPassword',async function(email,password){
     const user=await this.findOne({email});
     if(!user)throw new Error('User not found');
 
     const hashpassword=crypto.pbkdf2Sync(password,user.salt,1000,64,'sha512').toString('hex');
     if(hashpassword===user.password){
-        return user;
+        const token=createtokenforuser(user);
+        return token;
     }else{
         throw new Error('Username or password is incorrect');
     }

@@ -14,11 +14,12 @@ router.get('/signup',(req,res)=>{
 router.post('/signin',async(req,res)=>{
     try {
         const {email,password}=req.body;
-        const user=await User.matchPassword(email,password);
+        const token=await User.matchPassword(email,password);
+        res.cookie('token',token);
+        console.log(token);
         res.redirect('/');
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        return res.render('signin',{error:error.message});
     }
 });
 
@@ -28,8 +29,7 @@ router.post('/signup',async(req,res)=>{
         const user=await User.create({name:fullname,email,password});
         res.redirect('/');
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        return res.render('signup',{error:error.message});
     }
 });
 
