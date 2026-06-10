@@ -34,13 +34,14 @@ const userSchema=new Schema({
 // Hash the password before saving the user
 userSchema.pre('save',function(next){
     const user=this;
-    if(!user.isModified('password'))return;
+    if(!user.isModified('password'))return next();
     
     const salt=crypto.randomBytes(16).toString('hex');
     const hashpassword=crypto.pbkdf2Sync(user.password,salt,1000,64,'sha512').toString('hex');
 
     user.password=hashpassword;
     user.salt=salt;
+    next();
 });
 // Static method to match password and create token
 userSchema.static('matchPassword',async function(email,password){

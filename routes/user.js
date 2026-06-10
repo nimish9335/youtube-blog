@@ -16,7 +16,6 @@ router.post('/signin',async(req,res)=>{
         const {email,password}=req.body;
         const token=await User.matchPassword(email,password);
         res.cookie('token',token);
-        console.log(token);
         res.redirect('/');
     } catch (error) {
         return res.render('signin',{error:error.message});
@@ -31,6 +30,11 @@ router.post('/signup',async(req,res)=>{
     } catch (error) {
         return res.render('signup',{error:error.message});
     }
+});
+
+router.get('/logout',(req,res)=>{
+    res.clearCookie('token');
+    res.redirect('/');
 });
 
 module.exports=router;
