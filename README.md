@@ -148,27 +148,24 @@ Edit CSS variables in `public/css/style.css`:
 
 ## 🌐 Deployment
 
-For AWS deployment instructions, see [AWS_DEPLOYMENT.md](./AWS_DEPLOYMENT.md)
+### Deploy to Render (FREE & EASY)
+For detailed step-by-step instructions, see [RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md)
 
-### Quick Deploy to EC2
-```bash
-# SSH into instance
-ssh -i key.pem ec2-user@instance-ip
+**Quick Start:**
+1. Push code to GitHub ✅ (already done)
+2. Sign up at https://render.com (FREE)
+3. Connect GitHub repository
+4. Set environment variables
+5. Deploy in 2 clicks!
 
-# Clone and setup
-git clone <repo-url>
-cd youtube_blog
-npm install --production
+Your app will be live in 2-5 minutes with a URL like: `https://youtube-blog-xxxxx.onrender.com`
 
-# Create .env file with production values
-nano .env
-
-# Run with PM2
-npm install -g pm2
-pm2 start index.js
-pm2 startup
-pm2 save
-```
+Render is perfect for this project because:
+- ✅ FREE tier with 750 hours/month
+- ✅ Auto-deploy from GitHub on every push
+- ✅ Automatic SSL/HTTPS certificate
+- ✅ No credit card needed
+- ✅ Easy to upgrade later if needed
 
 ## 🔧 Environment Variables
 

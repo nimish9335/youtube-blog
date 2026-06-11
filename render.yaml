@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: youtube-blog
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        generateValue: false
+      - key: JWT_SECRET
+        generateValue: false
+      - key: CORS_ORIGIN
+        generateValue: false
+databases:
+  - name: mongodb
+    databaseName: youtube_blog
+    plan: free
