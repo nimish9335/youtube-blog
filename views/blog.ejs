@@ -15,12 +15,72 @@
 
         <h1 class="fw-bold mb-3"><%= blog.title %></h1>
 
-        <% if(blog.author){ %>
-            <p class="text-muted">By <%= blog.author.name %></p>
-        <% } %>
+        <%
+            const authorName = blog.author ? blog.author.name : 'Unknown author';
+            const authorImage = blog.author && blog.author.profileImage ? blog.author.profileImage : '/images/image.png';
+            const authorImageSrc = authorImage.startsWith('/') ? authorImage : '/' + authorImage;
+        %>
+        <div class="author-meta mb-4">
+            <img
+                src="<%= authorImageSrc %>"
+                class="author-avatar"
+                alt="<%= authorName %> profile image"
+            >
+            <div>
+                <p class="text-muted small mb-1">Written by</p>
+                <p class="fw-semibold mb-0"><%= authorName %></p>
+            </div>
+        </div>
 
         <p class="blog-content"><%= blog.content %></p>
         </article>
+        <section class="comments-panel mx-auto mt-5">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 class="h4 fw-bold mb-0">Comments</h2>
+                <span class="text-muted small"><%= comments ? comments.length : 0 %> total</span>
+            </div>
+
+            <% if(locals.user){ %>
+            <form action="/blog/addcomment/<%= blog.id %>" method="POST" class="comment-form mb-4">
+                <div class="mb-3">
+                    <label for="content" class="form-label fw-semibold">Leave a comment</label>
+                    <textarea class="form-control" id="content" name="content" rows="3" required placeholder="Write your thoughts..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Add comment</button>
+            </form>
+            <% } else { %>
+            <div class="comment-login mb-4">
+                <p class="mb-2">Please sign in to add a comment.</p>
+                <a href="/user/signin" class="btn btn-outline-primary btn-sm">Sign in</a>
+            </div>
+            <% } %>
+
+            <% if(comments && comments.length){ %>
+                <div class="comment-list">
+                    <% comments.forEach((comment)=>{ %>
+                        <%
+                            const commentAuthorName = comment.author ? comment.author.name : 'Unknown user';
+                            const commentAuthorImage = comment.author && comment.author.profileImage ? comment.author.profileImage : '/images/image.png';
+                            const commentAuthorImageSrc = commentAuthorImage.startsWith('/') ? commentAuthorImage : '/' + commentAuthorImage;
+                        %>
+                        <div class="comment-item">
+                            <img
+                                src="<%= commentAuthorImageSrc %>"
+                                class="comment-avatar"
+                                alt="<%= commentAuthorName %> profile image"
+                            >
+                            <div class="comment-body">
+                                <p class="fw-semibold mb-1"><%= commentAuthorName %></p>
+                                <p class="mb-0"><%= comment.content %></p>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <p class="text-muted mb-0">No comments yet. Be the first to share your thoughts.</p>
+            <% } %>
+        </section>
+         
     </main>
 
     <%- include ('./partials/scripts') %>

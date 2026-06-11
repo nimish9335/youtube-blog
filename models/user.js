@@ -21,7 +21,7 @@ const userSchema=new Schema({
     },
     profileImage:{
         type:String,
-        default:'images/image.png'
+        default:'/images/image.png'
     },
     role:{
         type:String,
@@ -32,16 +32,15 @@ const userSchema=new Schema({
     timestamps:true
 });
 // Hash the password before saving the user
-userSchema.pre('save',function(next){
+userSchema.pre('save',function(){
     const user=this;
-    if(!user.isModified('password'))return next();
+    if(!user.isModified('password'))return;
     
     const salt=crypto.randomBytes(16).toString('hex');
     const hashpassword=crypto.pbkdf2Sync(user.password,salt,1000,64,'sha512').toString('hex');
 
     user.password=hashpassword;
     user.salt=salt;
-    next();
 });
 // Static method to match password and create token
 userSchema.static('matchPassword',async function(email,password){

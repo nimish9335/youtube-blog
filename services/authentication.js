@@ -1,6 +1,12 @@
+require('../config/env');
 const JWT=require('jsonwebtoken');
 
-const secretKey='your_secret_key';
+const isProduction = process.env.NODE_ENV === 'production';
+const secretKey=process.env.JWT_SECRET;
+
+if(!secretKey){
+    throw new Error('JWT_SECRET environment variable is required');
+}
 
 function createtokenforuser(user){
     const payload={
@@ -10,13 +16,17 @@ function createtokenforuser(user){
         profileImage:user.profileImage,
         role:user.role
     };
-    const token= JWT.sign(payload,secretKey);
+    const token= JWT.sign(payload,secretKey,{expiresIn:'7d'});
     return token;
 }
 
 function verifytoken(token){
-    const payload=JWT.verify(token,secretKey);
-    return payload;
+    try{
+        const payload=JWT.verify(token,secretKey);
+        return payload;
+    }catch(err){
+        throw new Error('Invalid or expired token');
+    }
 }
 
 module.exports={

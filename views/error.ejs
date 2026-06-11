@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ('./partials/head') %>
+    <title>Error</title>
+</head>
+<body>
+    <%- include ('./partials/nav') %>
+
+    <div class="container py-5">
+        <div class="empty-state mx-auto">
+            <div class="empty-state-icon">⚠️</div>
+            <h1 class="h2 fw-bold mb-3">Oops! Something went wrong</h1>
+            <p class="text-muted mb-4">
+                <% if(status === 500) { %>
+                    We encountered an internal server error. Please try again later.
+                <% } else { %>
+                    Error <%= status %>: <%= message %>
+                <% } %>
+            </p>
+            <a href="/" class="btn btn-primary">Go back home</a>
+        </div>
+    </div>
+
+    <%- include ('./partials/scripts') %>
+</body>
+</html>
